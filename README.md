@@ -21,7 +21,17 @@ A lightweight desktop DICOM image viewer written in Python with Tkinter.
 - Tkinter
 - Internet access on first run to download Python packages
 
-Tkinter is included with most Python installations. On some Linux distributions it must be installed separately through the operating system package manager.
+Python versions are not equally compatible with every optional decoder dependency:
+
+- Python 3.10–3.14 installs `pylibjpeg-rle` for RLE-compressed DICOM files.
+- Python 3.15 currently skips `pylibjpeg-rle` because its PyO3 build dependency does not yet support Python 3.15. Other listed dependencies can still be installed, but RLE-compressed files may not decode. Use Python 3.14 if you need the pylibjpeg RLE plugin.
+
+Tkinter is included with most Python installations. On some Linux distributions it must be installed separately through the operating system package manager. On macOS, use a Python distribution that includes Tkinter; the OS-provided Python may have an older Tk version. After changing Python versions, remove the project's `.venv` and run the launcher again so it is recreated with the selected interpreter:
+
+```bash
+rm -rf .venv
+./run.sh
+```
 
 ## Run
 
@@ -35,7 +45,7 @@ Alternatively:
 python3 run.py
 ```
 
-The first run creates `.venv` inside the project and installs dependencies from `requirements.txt`. Later runs reuse the local environment.
+The first run creates `.venv` inside the project and installs dependencies from `requirements.txt`. Later runs reuse the local environment. If you install or switch Python versions, remove `.venv` before launching so it is rebuilt with the new interpreter.
 
 ## Usage
 
@@ -48,7 +58,7 @@ The first run creates `.venv` inside the project and installs dependencies from 
 
 ## Supported pixel data
 
-The viewer uses pydicom and pylibjpeg decoders for common JPEG, JPEG 2000, and RLE transfer syntaxes. It also handles standard, float, and double-float pixel data where supported by the DICOM file.
+The viewer uses pydicom and pylibjpeg decoders for common JPEG and JPEG 2000 transfer syntaxes. RLE decoding uses the optional `pylibjpeg-rle` plugin when available; that plugin is omitted on Python 3.15 until its build dependency supports that version, so RLE-compressed files may not decode there. The viewer also handles standard, float, and double-float pixel data where supported by the DICOM file.
 
 ## Project layout
 

@@ -4,4 +4,5 @@ pydicom
 pylibjpeg
 pylibjpeg-libjpeg
 pylibjpeg-openjpeg
-pylibjpeg-rle
+# pylibjpeg-rle currently cannot build with Python 3.15 (PyO3 support limit).
+pylibjpeg-rle; python_version < "3.15"
